@@ -20,18 +20,20 @@
   <div id="chat">
     <div id="clock">--:--:--</div>
     <div id="messages"></div>
-    <button id="go">Go</button>
-    <button id="stop">Stop</button>
-    <button id="check-ollama">Check Ollama</button>
+  <button id="go">Go</button>
+  <button id="stop">Stop</button>
+  <button id="check-ollama">Check Ollama</button>
+  <button id="dl-llama">Download llama3.2:1b</button>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
     const messages = document.getElementById('messages');
     const clock = document.getElementById('clock');
-    document.getElementById('go').onclick = () => socket.emit('go');
-    document.getElementById('stop').onclick = () => socket.emit('stop');
-    document.getElementById('check-ollama').onclick = () => socket.emit('check-ollama');
+  document.getElementById('go').onclick = () => socket.emit('go');
+  document.getElementById('stop').onclick = () => socket.emit('stop');
+  document.getElementById('check-ollama').onclick = () => socket.emit('check-ollama');
+  document.getElementById('dl-llama').onclick = () => socket.emit('dl-llama');
     socket.on('chat', msg => {
       const div = document.createElement('div');
       div.className = 'msg ' + (msg.sender || 'system');

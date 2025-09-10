@@ -17,7 +17,7 @@ try {
   config = { error: 'Could not read config.json' };
 }
 
-let clockInterval = null;
+
 
 app.use(express.static('public'));
 
@@ -25,6 +25,19 @@ io.on('connection', (socket) => {
   socket.emit('chat', { sender: 'system', text: 'Connected to Node App.' });
   socket.emit('chat', { sender: 'system', text: `Config: ${JSON.stringify(config)}` });
 
+  socket.on('dl-llama', async () => {
+    socket.emit('chat', { sender: 'system', text: 'Requesting llama3.2:1b download...' });
+    try {
+      const res = await axios.post(process.env.OLLAMA_URL + '/api/pull', { name: 'llama3.2:1b' });
+      if (res.data.status === 'success' || res.data.status === 'ok') {
+        socket.emit('chat', { sender: 'ollama', text: 'llama3.2:1b download started or already available.' });
+      } else {
+        socket.emit('chat', { sender: 'ollama', text: 'llama3.2:1b download response: ' + JSON.stringify(res.data) });
+      }
+    } catch (err) {
+      socket.emit('chat', { sender: 'ollama', text: 'Error requesting llama3.2:1b download.' });
+    }
+  });
   socket.on('check-ollama', async () => {
     try {
       const res = await axios.get(process.env.OLLAMA_URL + '/api/tags');
