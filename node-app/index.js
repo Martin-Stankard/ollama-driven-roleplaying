@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const configPath = path.join('/app', '../../config.json');
+const configPath = path.join(__dirname, '..', 'config.json');
 let config = {};
 try {
   config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
