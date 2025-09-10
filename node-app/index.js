@@ -3,29 +3,21 @@ import http from 'http';
 import { Server } from 'socket.io';
 import axios from 'axios';
 import fs from 'fs';
-import path, { fileURLToPath } from 'path';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const configPath = path.join(__dirname, '..', 'config.json');
-let config = {};
-try {
-  config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-} catch (e) {
-  config = { error: 'Could not read config.json' };
-}
-
 
 
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
   socket.emit('chat', { sender: 'system', text: 'Connected to Node App.' });
-  socket.emit('chat', { sender: 'system', text: `Config: ${JSON.stringify(config)}` });
+
+  // Per-socket clock interval
+  let clockInterval = null;
 
   socket.on('dl-llama', async () => {
     socket.emit('chat', { sender: 'system', text: 'Requesting llama3.2:1b download...' });
@@ -40,6 +32,7 @@ io.on('connection', (socket) => {
       socket.emit('chat', { sender: 'ollama', text: 'Error requesting llama3.2:1b download.' });
     }
   });
+
   socket.on('check-ollama', async () => {
     try {
       const res = await axios.get(process.env.OLLAMA_URL + '/api/tags');
