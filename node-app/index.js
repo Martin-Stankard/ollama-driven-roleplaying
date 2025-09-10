@@ -3,12 +3,14 @@ import http from 'http';
 import { Server } from 'socket.io';
 import axios from 'axios';
 import fs from 'fs';
-import path from 'path';
+import path, { fileURLToPath } from 'path';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, '..', 'config.json');
 let config = {};
 try {
