@@ -14,8 +14,19 @@ app.use(express.static('public'));
 let clockClients = new Set();
 let clockInterval = null;
 
-app.get('/api/clock', (req, res) => {
-  res.json({ time: new Date().toLocaleTimeString() });
+app.get('/stream', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  const send = () => {
+    res.write(`data: Hello World! ${new Date().toLocaleTimeString()}\n\n`);
+  };
+  send();
+  const interval = setInterval(send, 1000);
+
+  req.on('close', () => clearInterval(interval));
 });
 
 app.get('/api/ping/:target', (req, res) => {
