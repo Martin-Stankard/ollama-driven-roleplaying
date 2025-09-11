@@ -7,8 +7,8 @@ TODO:
 - lots in rpg config probably 
 - dreamsheet image, tts, music, sfx, ...lol svg. image overlay/ maps? is each a spun up container, config with http
 
-- foooocus-api image running and getting hit. Don't want to fork.... https://github.com/mrhan1993/Fooocus-APIc
-- kokoro? tts solution https://github.com/nazdridoy/kokoro-tts
+- foooocus-api image running and getting hit. Don't want to fork.... https://github.com/mrhan1993/Fooocus-API
+- kokoro? tts solution https://github.com/nazdridoy/kokoro-tts dockerized... https://github.com/remsky/Kokoro-FastAPI
 - unknown music solution https://github.com/ace-step/ACE-Step
 - ~~unknown sfx solution~~
 - ui beautification
