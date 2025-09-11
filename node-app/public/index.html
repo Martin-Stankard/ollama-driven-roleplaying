@@ -37,8 +37,6 @@
   document.getElementById('stop').onclick = () => socket.emit('stop');
   document.getElementById('check-ollama').onclick = () => socket.emit('check-ollama');
   document.getElementById('dl-llama').onclick = () => socket.emit('dl-llama');
-  document.getElementById('ping-stub1').onclick = () => socket.emit('ping-stub', { target: 'stub1' });
-  document.getElementById('ping-stub2').onclick = () => socket.emit('ping-stub', { target: 'stub2' });
   document.getElementById('ping-tts').onclick = () => socket.emit('ping-stub', { target: 'tts' });
   document.getElementById('ping-sound').onclick = () => socket.emit('ping-stub', { target: 'sound' });
   document.getElementById('ping-image').onclick = () => socket.emit('ping-stub', { target: 'image' });
