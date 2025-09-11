@@ -7,17 +7,6 @@ services:
     ports:
       - "4010:4010"
 
-  sound:
-    build: ./sound
-    container_name: sound
-    ports:
-      - "4011:4011"
-
-  image:
-    build: ./image
-    container_name: image
-    ports:
-      - "4012:4012"
   ollama:
     image: ollama/ollama:latest
     container_name: ollama

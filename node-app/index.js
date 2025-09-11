@@ -66,8 +66,6 @@ io.on('connection', (socket) => {
 
   socket.on('ping-stub', async ({ target }) => {
     let url = '';
-    if (target === 'stub1') url = 'http://stub1:4001/ping';
-    if (target === 'stub2') url = 'http://stub2:4002/ping';
     if (target === 'tts') url = 'http://tts:4010/ping';
     if (target === 'sound') url = 'http://sound:4011/ping';
     if (target === 'image') url = 'http://image:4012/ping';
