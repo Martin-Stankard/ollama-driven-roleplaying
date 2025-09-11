@@ -19,5 +19,17 @@ services:
     environment:
       - OLLAMA_URL=http://ollama:11434
 
+  stub1:
+    build: ./stub1
+    container_name: stub1
+    ports:
+      - "4001:4001"
+
+  stub2:
+    build: ./stub2
+    container_name: stub2
+    ports:
+      - "4002:4002"
+
 volumes:
   ollama_data:

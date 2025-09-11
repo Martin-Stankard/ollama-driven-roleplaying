@@ -63,6 +63,19 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (clockInterval) clearInterval(clockInterval);
   });
+
+  socket.on('ping-stub', async ({ target }) => {
+    let url = '';
+    if (target === 'stub1') url = 'http://stub1:4001/ping';
+    if (target === 'stub2') url = 'http://stub2:4002/ping';
+    if (!url) return socket.emit('chat', { sender: target, text: 'Unknown stub target.' });
+    try {
+      const res = await axios.get(url);
+      socket.emit('chat', { sender: target, text: res.data });
+    } catch (e) {
+      socket.emit('chat', { sender: target, text: 'Error pinging ' + target });
+    }
+  });
 });
 
 app.get('/', (req, res) => {
