@@ -7,10 +7,10 @@ TODO:
 - lots in rpg config probably 
 - dreamsheet image, tts, music, sfx, ...lol svg. image overlay/ maps? is each a spun up container, config with http
 
-- foooocus-api image running and getting hit. Don't want to fork....
-- kokoro? tts solution
-- unknown music solution
-- unknown sfx solution
+- foooocus-api image running and getting hit. Don't want to fork.... https://github.com/mrhan1993/Fooocus-APIc
+- kokoro? tts solution https://github.com/nazdridoy/kokoro-tts
+- unknown music solution https://github.com/ace-step/ACE-Step
+- ~~unknown sfx solution~~
 - ui beautification
 - electron app/ .exe-IZE docker compose up
 
@@ -41,4 +41,4 @@ Big json...mongo in long long TODO, last todo as of 9/10
                 -100 is good
                 -1 is Evil, but will only ever try to
                 
-            strengths, weaknesses 
+            strengths, weaknesses
