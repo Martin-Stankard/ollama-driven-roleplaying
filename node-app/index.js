@@ -7,12 +7,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const server = http.createServer(app);
+//copied from vibe infra start
+app.use(express.json());
 
-app.use(express.static('public'));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
-let clockClients = new Set();
-let clockInterval = null;
 
 app.get('/stream', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -28,7 +29,7 @@ app.get('/stream', (req, res) => {
 
   req.on('close', () => clearInterval(interval));
 });
-
+//copied from vibe infra end
 app.get('/api/ping/:target', (req, res) => {
   const { target } = req.params;
   let url = '';
