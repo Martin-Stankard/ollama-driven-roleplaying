@@ -1,86 +1,42 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
-import axios from 'axios';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-
 
 app.use(express.static('public'));
 
-io.on('connection', (socket) => {
-  socket.emit('chat', { sender: 'system', text: 'Connected to Node App.' });
+let clockClients = new Set();
+let clockInterval = null;
 
-  // Per-socket clock interval
-  let clockInterval = null;
+app.get('/api/clock', (req, res) => {
+  res.json({ time: new Date().toLocaleTimeString() });
+});
 
-  socket.on('dl-llama', async () => {
-    socket.emit('chat', { sender: 'system', text: 'Requesting llama3.2:1b download...' });
-    try {
-      const res = await axios.post(process.env.OLLAMA_URL + '/api/pull', { name: 'llama3.2:1b' });
-      if (res.data.status === 'success' || res.data.status === 'ok') {
-        socket.emit('chat', { sender: 'ollama', text: 'llama3.2:1b download started or already available.' });
-      } else {
-        socket.emit('chat', { sender: 'ollama', text: 'llama3.2:1b download response: ' + JSON.stringify(res.data) });
-      }
-    } catch (err) {
-      socket.emit('chat', { sender: 'ollama', text: 'Error requesting llama3.2:1b download.' });
-    }
-  });
-
-  socket.on('check-ollama', async () => {
-    try {
-      const res = await axios.get(process.env.OLLAMA_URL + '/api/tags');
-      const hasLlama = res.data.models.some(m => m.name === 'llama3.2:1b');
-      socket.emit('chat', { sender: 'ollama', text: hasLlama ? 'llama3.2:1b is available.' : 'llama3.2:1b is NOT available.' });
-    } catch (err) {
-      socket.emit('chat', { sender: 'ollama', text: 'Error connecting to ollama.' });
-    }
-  });
-
-  socket.on('go', () => {
-    if (!clockInterval) {
-      clockInterval = setInterval(() => {
-        socket.emit('clock', { time: new Date().toLocaleTimeString() });
-      }, 1000);
-      socket.emit('chat', { sender: 'system', text: 'Clock started.' });
-    }
-  });
-
-  socket.on('stop', () => {
-    if (clockInterval) {
-      clearInterval(clockInterval);
-      clockInterval = null;
-      socket.emit('chat', { sender: 'system', text: 'Clock stopped.' });
-    }
-  });
-
-  socket.on('disconnect', () => {
-    if (clockInterval) clearInterval(clockInterval);
-  });
-
-  socket.on('ping-stub', async ({ target }) => {
-    let url = '';
-    if (target === 'tts') url = 'http://tts:4010/ping';
-    if (target === 'sound') url = 'http://sound:4011/ping';
-    if (target === 'image') url = 'http://image:4012/ping';
-    if (!url) return socket.emit('chat', { sender: target, text: 'Unknown stub target.' });
-    try {
-      const res = await axios.get(url);
-      socket.emit('chat', { sender: target, text: res.data });
-    } catch (e) {
-      socket.emit('chat', { sender: target, text: 'Error pinging ' + target });
-    }
+app.get('/api/ping/:target', (req, res) => {
+  const { target } = req.params;
+  let url = '';
+  if (target === 'tts') url = 'http://tts:4010/ping';
+  if (target === 'sound') url = 'http://sound:4011/ping';
+  if (target === 'image') url = 'http://image:4012/ping';
+  if (!url) return res.json({ error: 'Unknown stub target.' });
+  // Use http.get for stub ping
+  import('http').then(http => {
+    http.get(url, (r) => {
+      let data = '';
+      r.on('data', chunk => data += chunk);
+      r.on('end', () => res.json({ response: data }));
+    }).on('error', () => res.json({ error: 'Error pinging ' + target }));
   });
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 server.listen(3000, () => {
