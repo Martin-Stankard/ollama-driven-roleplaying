@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
+const port = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,10 +48,8 @@ app.get('/api/ping/:target', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+
+app.listen(port, () => {
+  console.log(`Node stream server running on port ${port}`);
 });
 
-server.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
