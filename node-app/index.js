@@ -68,6 +68,9 @@ io.on('connection', (socket) => {
     let url = '';
     if (target === 'stub1') url = 'http://stub1:4001/ping';
     if (target === 'stub2') url = 'http://stub2:4002/ping';
+    if (target === 'tts') url = 'http://tts:4010/ping';
+    if (target === 'sound') url = 'http://sound:4011/ping';
+    if (target === 'image') url = 'http://image:4012/ping';
     if (!url) return socket.emit('chat', { sender: target, text: 'Unknown stub target.' });
     try {
       const res = await axios.get(url);

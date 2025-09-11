@@ -1,6 +1,23 @@
 version: '3.8'
 
 services:
+  tts:
+    build: ./tts
+    container_name: tts
+    ports:
+      - "4010:4010"
+
+  sound:
+    build: ./sound
+    container_name: sound
+    ports:
+      - "4011:4011"
+
+  image:
+    build: ./image
+    container_name: image
+    ports:
+      - "4012:4012"
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
@@ -18,18 +35,6 @@ services:
       - ollama
     environment:
       - OLLAMA_URL=http://ollama:11434
-
-  stub1:
-    build: ./stub1
-    container_name: stub1
-    ports:
-      - "4001:4001"
-
-  stub2:
-    build: ./stub2
-    container_name: stub2
-    ports:
-      - "4002:4002"
 
 volumes:
   ollama_data:
