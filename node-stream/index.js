@@ -1,7 +1,7 @@
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const app = express();
-const port = 8079;
+const port = 3000;
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/admin';
 
 app.use(express.json());
