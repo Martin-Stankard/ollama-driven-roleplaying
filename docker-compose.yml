@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  mongo:
+        image: mongo:6
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: password
+        ports:
+          - "27017:27017"
+
   tts:
     build: ./tts
     container_name: tts
@@ -8,22 +16,41 @@ services:
       - "4010:4010"
 
   ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
+      image: ollama/ollama:latest
+      container_name: ollama
+      ports:
+      - 11434:11434
+      volumes:
+      - ollama:/root/.ollama
+      pull_policy: always
+      tty: true
+      restart: always
+      environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      networks:
+      - ollama-docker
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+  node-stream:
+        build: ./node-stream
+        ports:
+          - "8079:8079"
+        environment:
+          MONGO_URL: mongodb://admin:password@mongo:27017/admin
+        depends_on:
+          - mongo
 
-  node-app:
-    build: ./node-app
-    container_name: node-app
-    ports:
-      - "3000:3000"
-    depends_on:
-      - ollama
-    environment:
-      - OLLAMA_URL=http://ollama:11434
 
 volumes:
-  ollama_data:
+  ollama:
+  open-webui:
+  
+
+networks:
+  ollama-docker:
+    driver: bridge    

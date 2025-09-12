@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Streaming Hello World & MongoDB CRUD</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8fc; margin: 0; padding: 2em; }
+    h1 { color: #2a2a2a; }
+    .section { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ddd; margin-bottom: 2em; padding: 1em; }
+    .section h2 { margin-top: 0; }
+    .actions { display: flex; gap: 1em; margin-bottom: 1em; }
+    .actions button { padding: 0.5em 1.5em; border-radius: 4px; border: 1px solid #aaa; background: #e0e7ff; cursor: pointer; font-weight: bold; }
+    .actions button:hover { background: #c7d2fe; }
+    .desc { color: #555; margin-bottom: 0.5em; }
+    #result { background: #f3f4f6; border-radius: 4px; padding: 1em; margin-top: 1em; min-height: 2em; }
+    .input-row { margin-bottom: 1em; }
+    .input-row input { padding: 0.5em; border-radius: 4px; border: 1px solid #aaa; width: 60%; }
+    .label { font-weight: bold; margin-right: 0.5em; }
+  </style>
+  <script>
+    window.onload = function() {
+      const stream = new EventSource('/stream');
+      stream.onmessage = function(e) {
+        document.getElementById('stream').textContent = e.data;
+      };
+
+      // DB actions
+      document.getElementById('db-create').onclick = async function() {
+        const name = document.getElementById('db-create-input').value;
+        const res = await fetch('/db/create', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('db-read').onclick = async function() {
+        const res = await fetch('/db/read');
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('db-update').onclick = async function() {
+        const name = document.getElementById('db-update-input').value;
+        const res = await fetch('/db/update', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('db-delete').onclick = async function() {
+        const res = await fetch('/db/delete', { method: 'POST' });
+        document.getElementById('result').textContent = await res.text();
+      };
+
+      // Collection actions
+      document.getElementById('col-create').onclick = async function() {
+        const name = document.getElementById('col-create-input').value;
+        const res = await fetch('/collection/create', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('col-read').onclick = async function() {
+        const res = await fetch('/collection/read');
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('col-update').onclick = async function() {
+        const name = document.getElementById('col-update-input').value;
+        const res = await fetch('/collection/update', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('col-delete').onclick = async function() {
+        const res = await fetch('/collection/delete', { method: 'POST' });
+        document.getElementById('result').textContent = await res.text();
+      };
+
+      // Document actions
+      document.getElementById('doc-create').onclick = async function() {
+        const text = document.getElementById('doc-create-input').value;
+        const res = await fetch('/document/create', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ text }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('doc-read').onclick = async function() {
+        const res = await fetch('/document/read');
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('doc-update').onclick = async function() {
+        const text = document.getElementById('doc-update-input').value;
+        const res = await fetch('/document/update', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ text }) });
+        document.getElementById('result').textContent = await res.text();
+      };
+      document.getElementById('doc-delete').onclick = async function() {
+        const res = await fetch('/document/delete', { method: 'POST' });
+        document.getElementById('result').textContent = await res.text();
+      };
+    };
+  </script>
+</head>
+<body>
+  <h1 id="stream">Loading...</h1>
+
+  <div class="section">
+    <h2>Database Actions</h2>
+    <p class="desc">Create, read, update, or delete the database itself. Use the text field for create/update.</p>
+    <div class="input-row">
+      <span class="label">Database Name:</span>
+      <input id="db-create-input" type="text" placeholder="Enter DB name for create" />
+      <input id="db-update-input" type="text" placeholder="Enter DB name for update" />
+    </div>
+    <div class="actions">
+      <button id="db-create">Create DB</button>
+      <button id="db-read">Read DB</button>
+      <button id="db-update">Update DB</button>
+      <button id="db-delete">Delete DB</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Collection Actions</h2>
+    <p class="desc">Create, read, update, or delete a collection. Use the text field for create/update.</p>
+    <div class="input-row">
+      <span class="label">Collection Name:</span>
+      <input id="col-create-input" type="text" placeholder="Enter collection name for create" />
+      <input id="col-update-input" type="text" placeholder="Enter collection name for update" />
+    </div>
+    <div class="actions">
+      <button id="col-create">Create Collection</button>
+      <button id="col-read">Read Collection</button>
+      <button id="col-update">Update Collection</button>
+      <button id="col-delete">Delete Collection</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Document Actions</h2>
+    <p class="desc">Create, read, update, or delete a document. Use the text field for create/update.</p>
+    <div class="input-row">
+      <span class="label">Document Text:</span>
+      <input id="doc-create-input" type="text" placeholder="Enter document text for create" />
+      <input id="doc-update-input" type="text" placeholder="Enter document text for update" />
+    </div>
+    <div class="actions">
+      <button id="doc-create">Create Document</button>
+      <button id="doc-read">Read Document</button>
+      <button id="doc-update">Update Document</button>
+      <button id="doc-delete">Delete Document</button>
+    </div>
+  </div>
+
+  <pre id="result"></pre>
+</body>
+</html>
