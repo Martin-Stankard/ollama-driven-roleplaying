@@ -4,6 +4,11 @@ LLM Agent Network, streaming webpage server, DM + nplayers, chat output, time pa
 docker-compose up --build
 
 TODO: 
+- debug mongo
+- add tabs, as db tab
+    -- Rpg Chat Tab ...I guess dream sheet is a sequence of events spelled out in the rpgconfig then into a loop, defined same place.
+        - read in rpg config there...
+        - then poof, create tabs and ? 
 - lots in rpg config probably 
 - dreamsheet image, tts, music, sfx, ...lol svg. image overlay/ maps? is each a spun up container, config with http
 
