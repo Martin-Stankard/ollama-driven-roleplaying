@@ -4,6 +4,7 @@ LLM Agent Network, streaming webpage server, DM + nplayers, chat output, time pa
 docker-compose up --build
 
 TODO: 
+- I don't see any tabs, debug: "You now have a tab interface: the "database" tab shows all your buttons, and the "start up" tab streams unit test results to a chat window. Unit tests are run and streamed every time you switch to the "start up" tab.
 - debug mongo
 - add tabs, as db tab
     -- Rpg Chat Tab ...I guess dream sheet is a sequence of events spelled out in the rpgconfig then into a loop, defined same place.
