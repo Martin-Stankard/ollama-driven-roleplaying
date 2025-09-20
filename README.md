@@ -4,7 +4,7 @@ LLM Agent Network, streaming webpage server, DM + n agentPlayers in a "room" + n
 docker-compose up --build
 
 TODO: 
-- debug tabs, as db,startup,loop,closing in index.html then ... consume cfg then more tabs?... 
+- debug tabs, as db,startup,loop,closing, agents, rooms  in index.html then ... consume cfg then more tabs?... 
 - lots in rpg config probably, 
  -- list of startup curl commands equivalents (because I can test curl commands in postman fast...)
  -- list of loop logic curl commands "The d&d game, gm manages list of players, gm manages roomListOAgents.". 
@@ -20,11 +20,15 @@ TODO:
     --- user-agent  piggy backs dm-leader agent, manages list of agents.  
     --- User Agent View is the streaming ui...TODO full screen 1080p svg test.
     --- config has  a agent create schema...just need "motto"/same as system prompt
+    --- agent tab has sub tabs of all agents
  --- inside a simply "decorated" room. 
-    ---Lifecycle of "secret agent talk": agent a invites agent b to room, limit exchanges to n=3, accept/decline?, eecute secret comms, kill room.
  --- has static access to some https module, existing server only effectively streams to front end so probably want a nice big
- --- secret talk is another room: invite, secret talk up to n=3 exchanges? kill room....should be fun to peak at this log...
- 
+ --- secret talk room: invite, secret talk up to n=3 exchanges? kill room....should be fun to peak at this log...
+    ---Lifecycle of "secret agent talk": agent a invites agent b to room, limit exchanges to n=3, accept/decline?, eecute secret comms, kill room.
+ ---  game room rules in cfg. "The game is a decoration for a room Everyone in the room can see "the rules". Rules are sets and can be booleaned, preference goes to newest oversight. DM has Secret rules...need to think about this.
+ --- rooms tab has sub tabs for all rooms
+ so meaningful oop talk on room, with possible decoration is [isSecret, isDnD, isCodeDev, ]
+ all rooms have user view + agents 
 
 
  fat streamingFunction static object and a httpFunction static object
