@@ -14,9 +14,22 @@
     .user { color: #fff; }
     #clock { font-size: 2em; margin-bottom: 1em; }
     button { margin: 0 0.5em; padding: 0.5em 1em; }
+    #tabs { max-width: 600px; margin: 2em auto 0 auto; text-align: center; }
+    #tabs button { background: #444; color: #eee; border: none; border-radius: 4px; margin: 0 0.5em; padding: 0.5em 1em; cursor: pointer; }
+    #tabs button.active { background: #6cf; color: #222; }
+    .tab { display: none; }
+    #tabs { max-width: 600px; margin: 2em auto 0 auto; text-align: center; }
+    #tabs button { background: #444; color: #eee; border: none; border-radius: 4px; margin: 0 0.5em; padding: 0.5em 1em; cursor: pointer; }
+    #tabs button.active { background: #6cf; color: #222; }
   </style>
   <script>
-    // Test report streaming for startup tab
+    function showTab(tab) {
+      document.getElementById('database').style.display = tab === 'database' ? '' : 'none';
+      document.getElementById('startup').style.display = tab === 'startup' ? '' : 'none';
+      Array.from(document.querySelectorAll('#tabs button')).forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.replace(/\s/g,'').toLowerCase() === tab.replace(/\s/g,'').toLowerCase());
+      });
+    }
     function startTestStream() {
       const testStream = new EventSource('/test-stream');
       const testMessages = document.getElementById('test-messages');
@@ -31,18 +44,18 @@
         testStream.close();
       };
     }
-    document.querySelector('button[onclick="showTab(\'startup\')"]').onclick = function() {
-      showTab('startup');
-      startTestStream();
-    };
     window.onload = function() {
-      const stream = new EventSource('/stream');
-      stream.onmessage = function(e) {
-        document.getElementById('stream').textContent = e.data;
-      }};
-      </script
+      showTab('database');
+      document.querySelector('#tabs button:nth-child(1)').onclick = function() {
+        showTab('database');
+      };
+      document.querySelector('#tabs button:nth-child(2)').onclick = function() {
+        showTab('startup');
+        startTestStream();
+      };
+    };
   
-</head>
+  </head>
 <body>
   <div id="tabs">
     <button onclick="showTab('database')">Database</button>
@@ -66,7 +79,6 @@
       <div id="test-messages"></div>
     </div>
   </div>
-  .tab { display: none; }
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
